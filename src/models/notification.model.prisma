@@ -1,0 +1,14 @@
+model Notification {
+    id                 Int                @id @default(autoincrement())
+    title              String
+    body               String
+    image              String
+    topic              String
+    url                String
+    priority           String
+    notification_reads NotificationRead[]
+    created_at         DateTime           @default(now())
+    updated_at         DateTime           @updatedAt
+
+    @@map("notifications")
+}

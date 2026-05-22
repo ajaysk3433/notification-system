@@ -1,0 +1,9 @@
+model NotificationRead {
+    id              Int          @id @default(autoincrement())
+    user_id         Int
+    notification    Notification @relation(fields: [notification_id], references: [id])
+    notification_id Int
+    read_at         DateTime     @default(now())
+
+    @@map("notification_reads")
+}

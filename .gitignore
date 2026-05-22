@@ -1,0 +1,7 @@
+schools2ai-firebase-adminsdk.json
+node_modules
+dist
+*.env
+*.zip
+/generated/prisma
+.DS_Store
