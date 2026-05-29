@@ -24,8 +24,8 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-#COPY config.env ./
-#COPY schools2ai-firebase-adminsdk.json ./
+COPY config.env ./
+COPY schools2ai-firebase-adminsdk.json ./
 
 # Install only production dependencies
 RUN npm install --omit=dev

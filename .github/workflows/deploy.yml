@@ -23,9 +23,12 @@ jobs:
             mkdir -p /root/ci_cd
             cd /root/ci_cd
 
+            
+
             git clone https://github.com/ajaysk3433/notification-system.git
 
             cd notification-system
+            cp -r /root/app_config/notification/* .
 
             docker stop notification || true
             docker rm notification || true
@@ -38,7 +41,6 @@ jobs:
               --restart unless-stopped \
               -e NODE_ENV=production \
               --network app-net \
-              -v /root/app_config/notification:/app \
               notification
 
             docker image prune -f
