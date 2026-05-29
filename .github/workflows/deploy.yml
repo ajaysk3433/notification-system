@@ -19,7 +19,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /root/server/notification
+            rm -rf /root/server/
+            cd /root/server/
             
             # Pull latest code
             # git pull origin main
@@ -41,6 +42,7 @@ jobs:
               --restart unless-stopped \
               -e NODE_ENV=production \
               --network app-net \
+             -v /root/app_config/notification:/app
               notification
             
             # Clean up all dangling images
