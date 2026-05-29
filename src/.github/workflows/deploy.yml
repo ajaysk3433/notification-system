@@ -1,0 +1,46 @@
+name: Deploy notification to VPS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /root/server/notification
+            
+            # Pull latest code
+            git pull origin main
+            
+            # Stop and remove old container
+            docker stop notification || true
+            docker rm notification || true
+            
+            # Remove old image (prevents dangling images)
+            docker rmi notification:latest || true
+            
+            # Build new image
+            docker build -t notification .
+            
+            # Run new container
+            docker run -d \
+              --name notification \
+              --restart unless-stopped \
+              -e NODE_ENV=production \
+              --network app-net \
+              notification
+            
+            # Clean up all dangling images
+            docker image prune -f
