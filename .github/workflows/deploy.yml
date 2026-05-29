@@ -22,7 +22,8 @@ jobs:
             cd /root/server/notification
             
             # Pull latest code
-            git pull origin main
+            # git pull origin main
+            git close https://github.com/ajaysk3433/notification-system.git
             
             # Stop and remove old container
             docker stop notification || true
