@@ -19,31 +19,26 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            rm -rf /root/server/
-            cd /root/server/
-            
-            # Pull latest code
-            # git pull origin main
+            rm -rf /root/ci_cd
+            mkdir -p /root/ci_cd
+            cd /root/ci_cd
+
             git clone https://github.com/ajaysk3433/notification-system.git
-            
-            # Stop and remove old container
+
+            cd notification-system
+
             docker stop notification || true
             docker rm notification || true
-            
-            # Remove old image (prevents dangling images)
             docker rmi notification:latest || true
-            
-            # Build new image
+
             docker build -t notification .
-            
-            # Run new container
+
             docker run -d \
               --name notification \
               --restart unless-stopped \
               -e NODE_ENV=production \
               --network app-net \
-             -v /root/app_config/notification:/app
+              -v /root/app_config/notification:/app \
               notification
-            
-            # Clean up all dangling images
+
             docker image prune -f
